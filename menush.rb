@@ -47,6 +47,7 @@ end
 
 def clear
   puts "\033[2J"
+  puts "\033[0;0H"
 end
 
 # We keep looping until the user asks to exit
