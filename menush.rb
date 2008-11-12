@@ -72,42 +72,46 @@ catch(:exit) do
     die("Invalid command: #{path}") unless File.executable?(path)
   end
 
-  while true
-    cli = HighLine.new
-    selected = nil
+  begin
+    while true
+      cli = HighLine.new
+      selected = nil
 
-    cli.choose do |menu|
-      menu.prompt = "Please make a selection [1-#{menu_def.size + 1}]: "
-      menu_def.each_with_index do |params, index|
-        prompt = params['prompt']
-        menu.choice(prompt) { selected = index }
+      cli.choose do |menu|
+        menu.prompt = "Please make a selection [1-#{menu_def.size + 1}]: "
+        menu_def.each_with_index do |params, index|
+          prompt = params['prompt']
+          menu.choice(prompt) { selected = index }
+        end
+        menu.choice('Exit')
       end
-      menu.choice('Exit')
+
+      die('Exiting.') if selected.nil?
+
+      cmd_params = menu_def[selected]
+
+      # TODO: smart escaping of arguments. For now, we just disallow any input 
+      # which contains shell special characters
+      cmd_args = ''
+      if cmd_params['allow_args']
+        safe_char_pat = %r|[-.+=_/,a-zA-Z0-9 ]|
+        cmd_args = cli.ask("Command arguments: ") {|q| q.validate = safe_char_pat }
+      end
+
+      cmd_string = "#{cmd_params['path']} #{cmd_params['defaults']} #{cmd_args}".strip
+      Syslog.info("About to run command for #{current_user}: #{cmd_string.inspect}")
+
+      clear
+      status = system(cmd_string)
+      if $? != 0
+        Syslog.info("Command exited with non-zero status ($?)")
+      end
+      puts "\n\nPress Return/Enter key to continue..."
+      STDIN.gets
+      clear
     end
-
-    die('Exiting.') if selected.nil?
-
-    cmd_params = menu_def[selected]
-
-    # TODO: smart escaping of arguments. For now, we just disallow any input 
-    # which contains shell special characters
-    cmd_args = ''
-    if cmd_params['allow_args']
-      safe_char_pat = %r|[-.+=_/,a-zA-Z0-9 ]|
-      cmd_args = cli.ask("Command arguments: ") {|q| q.validate = safe_char_pat }
-    end
-
-    cmd_string = "#{cmd_params['path']} #{cmd_params['defaults']} #{cmd_args}".strip
-    Syslog.info("About to run command for #{current_user}: #{cmd_string.inspect}")
-
-    clear
-    status = system(cmd_string)
-    if $? != 0
-      Syslog.info("Command exited with non-zero status ($?)")
-    end
-    puts "\n\nPress Return/Enter key to continue..."
-    STDIN.gets
-    clear
+  rescue Interrupt, EOFError
+    die('Exiting.')
   end # while true
 end # catch(:exit)
 
