@@ -75,11 +75,14 @@ catch(:exit) do
 
   begin
     while true
+      clear
       cli = HighLine.new
       selected = nil
 
+      puts "Please choose a command:\n\n"
+
       cli.choose do |menu|
-        menu.prompt = "Please make a selection [1-#{menu_def.size + 1}]: "
+        menu.prompt = "\n[1-#{menu_def.size + 1}]: "
         menu_def.each_with_index do |params, index|
           prompt = params['prompt']
           menu.choice(prompt) { selected = index }
@@ -109,7 +112,6 @@ catch(:exit) do
       end
       puts "\n\nPress Return/Enter key to continue..."
       STDIN.gets
-      clear
     end
   rescue Interrupt, EOFError
     die('Exiting.')
