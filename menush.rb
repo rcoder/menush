@@ -1,28 +1,5 @@
 #!/usr/bin/env ruby
 
-# menush.rb 
-#
-# Use in place of a full-featured shell to allow a user access to only
-# a pre-determined set of commands. Designed for limited access to web
-# servers, shared systems, or admin/debugging consoles
-#
-# Menus are defined in a YAML file containing an array of hashes; each
-# item in the array will be displayed as an option in the menu, and the
-# hash should define the 'prompt' and 'path' keys. The 'defaults' key is 
-# optional, and provides a list of command-line arguments to be passed 
-# to the command; the 'allow_args' key establishes whether to prompt the
-# user for additional arguments before launching the command.
-#
-# Example menu definition:
-# ---
-# - prompt: "User admin console"
-#   path: /usr/local/sbin/useradm
-#   defaults: "--ldap-host=ldap.example.com --default-realm=EXAMPLE.COM"
-#   allow_args: false
-# - prompt: "Check uptime"
-#   path: /usr/bin/uptime
-#   allow_args: false
-
 require 'etc'
 require 'yaml'
 require 'syslog'
