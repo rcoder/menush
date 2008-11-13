@@ -106,6 +106,7 @@ catch(:exit) do
       Syslog.info("About to run command for #{current_user}: #{cmd_string.inspect}")
 
       clear
+      puts "Running '#{cmd_string}'...\n\n"
       status = system(cmd_string)
       if $? != 0
         Syslog.info("Command exited with non-zero status ($?)")
