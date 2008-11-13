@@ -12,14 +12,19 @@ to the command; the 'allow_args' key establishes whether to prompt the
 user for additional arguments before launching the command.
 
 Example menu definition:
+
 ---
-- prompt: "User admin console"
-  path: /usr/local/sbin/useradm
-  defaults: "--ldap-host=ldap.example.com --default-realm=EXAMPLE.COM"
-  allow_args: false
-- prompt: "Check uptime"
-  path: /usr/bin/uptime
-  allow_args: false
+- path: /usr/bin/uptime
+  prompt: "Check system uptime"
+- path: /bin/cat
+  prompt: "Display MOTD"
+  defaults: /etc/motd
+- path: /bin/uname
+  prompt: "Display uname flags"
+  allow_args: true
+- path: /usr/bin/vim
+  prompt: "Edit a file"
+  allow_args: true
 
 Once configured, just add menush.rb to the list of valid login shells
 in /etc/shells, and then change the user's /etc/passwd entry to use it
@@ -27,5 +32,5 @@ in place of bash (or whatever shell they had been using).
 
 See rcoder's blog post for more details:
 
-http://rcoder.net/
+http://rcoder.net/content/granting-just-enough-power-but-no-more
 
