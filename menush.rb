@@ -75,7 +75,7 @@ catch(:exit) do
       # which contains shell special characters
       cmd_args = ''
       if cmd_params['allow_args']
-        safe_char_pat = %r|[-.+=_/,a-zA-Z0-9 ]|
+        safe_char_pat = %r|^[-.+=_/,a-zA-Z0-9 ]+$|
         cmd_args = cli.ask("Command arguments: ") {|q| q.validate = safe_char_pat }
       end
 
