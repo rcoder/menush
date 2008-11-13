@@ -86,7 +86,7 @@ catch(:exit) do
       puts "Running '#{cmd_string}'...\n\n"
       status = system(cmd_string)
       if $? != 0
-        Syslog.info("Command exited with non-zero status ($?)")
+        Syslog.info("Command exited with non-zero status (#{$?})")
       end
       puts "\n\nPress Return/Enter key to continue..."
       STDIN.gets
