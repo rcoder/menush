@@ -2,7 +2,7 @@ menush.rb
 
 Use in place of a full-featured shell to allow a user access to only
 a pre-determined set of commands. Designed for limited access to web
-servers, shared systems, or admin/debugging consoles
+servers, shared systems, or admin/debugging consoles.
 
 Menus are defined in a YAML file containing an array of hashes; each
 item in the array will be displayed as an option in the menu, and the
@@ -34,3 +34,4 @@ See rcoder's blog post for more details:
 
 http://rcoder.net/content/granting-just-enough-power-but-no-more
 
+Depends on the HighLine gem and the Ruby stdlib.
