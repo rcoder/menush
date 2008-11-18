@@ -18,7 +18,7 @@ exit_status = 0
 def die(msg, code=1)
   STDERR.puts(msg)
   Syslog.err(msg)
-  exit_status = 1
+  exit_status = code
   throw :exit
 end
 
